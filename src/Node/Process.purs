@@ -211,13 +211,13 @@ workerH = EventHandle "worker" mkEffectFn1
 -- |
 -- | See Node docs: https://nodejs.org/dist/latest-v18.x/docs/api/process.html#signal-events
 mkSignalH :: Signal -> EventHandle Process (Effect Unit) (Effect Unit)
-mkSignalH sig = EventHandle (Signal.toString sig) identity
+mkSignalH sigName = EventHandle (Signal.toString sigName) identity
 
 -- | Same as `mkSignalH` but allows for more options in case the `Signal` ADT is missing any.
 -- |
 -- | See Node docs: https://nodejs.org/dist/latest-v18.x/docs/api/process.html#signal-events
 mkSignalH' :: String -> EventHandle Process (Effect Unit) (Effect Unit)
-mkSignalH' sig = EventHandle (String.toUpper sig) identity
+mkSignalH' sigName = EventHandle (String.toUpper sigName) identity
 
 -- | The `process.abort()` method causes the Node.js process to exit immediately and generate a core file.
 -- | This feature is not available in Worker threads.
@@ -404,12 +404,12 @@ kill p = runEffectFn1 killImpl p
 foreign import killImpl :: EffectFn1 (Pid) (Unit)
 
 killStr :: Pid -> String -> Effect Unit
-killStr p sig = runEffectFn2 killStrImpl p sig
+killStr p sigName = runEffectFn2 killStrImpl p sigName
 
 foreign import killStrImpl :: EffectFn2 (Pid) (String) (Unit)
 
 killInt :: Pid -> Int -> Effect Unit
-killInt p sig = runEffectFn2 killIntImpl p sig
+killInt p sigName = runEffectFn2 killIntImpl p sigName
 
 foreign import killIntImpl :: EffectFn2 (Pid) (Int) (Unit)
 
